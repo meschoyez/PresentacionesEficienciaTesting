@@ -1,0 +1,27 @@
+@startuml desarrolloSW
+
+[*] -> ProgramaListo
+ProgramaListo --> Compilado
+' Compilado --> Error
+Compilado -> Ejecutado
+Compilado -up-> Error
+Ejecutado -up-> Error
+Error -left-> ProgramaListo : corregir
+Compilado --> Depurado
+Compilado --> Profile
+Detectado -up-> ProgramaListo : mejorar
+Depurado -up-> Detectado
+Depurado -down-> Aceptado
+Ejecutado -down-> Aceptado
+Profile -down-> Aceptado
+Profile -left-> Detectado
+Aceptado -> [*] : cumple requerimientos
+
+
+state Detectado #lightgreen
+
+state Depurado #lightgreen : Análisis de memoria\ndurante ejecución
+
+state Profile #pink : Medición tiempos,\ncobertura código,\nanálisis ejecución
+
+@enduml

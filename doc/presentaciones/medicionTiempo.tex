@@ -1,0 +1,24 @@
+\begin{frame}[fragile]{Probando Software}
+    Uso de CPU
+    \begin{itemize}
+        \item \verb|$ top|
+    \end{itemize}
+    Tiempo de ejecución
+    \begin{itemize}
+        \item \verb|$ time exec| $\Rightarrow$ grano grueso
+        \item \verb|gettimeofday()| $\Rightarrow$ grano fino
+        \begin{lstlisting}[style=consola]
+  gettimeofday(inicio, NULL);
+  ..
+  gettimeofday(fin, NULL);
+        \end{lstlisting}
+        \item \verb|clock()| $\Rightarrow$ tiempo de CPU
+        \begin{lstlisting}[style=consola]
+  inicio = clock();
+  ..
+  fin = clock();
+        \end{lstlisting}
+        % \item \verb|clock()|
+        % \item \verb|clock()|
+    \end{itemize}
+\end{frame}
