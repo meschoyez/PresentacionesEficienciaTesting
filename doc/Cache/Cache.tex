@@ -1,0 +1,165 @@
+\documentclass[a4paper, 11pt]{article}
+
+\usepackage[spanish]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{times}
+
+\addtolength{\voffset}{-3cm}
+\addtolength{\textheight}{5cm}
+\addtolength{\textwidth}{1cm}
+ 
+\title{Memorias Cache}
+\author{Maximiliano A. Eschoyez\\ Programación Eficiente --- UBP}
+\date{2010}
+
+\begin{document}
+
+\maketitle
+
+\subsection*{Mediciones}
+
+\begin{itemize}
+\item \emph{Hit Rate}: Tasa de cantidad de aciertos en la memoria
+  cache, es decir, cuando se va a buscar un dato que está allí. Como
+  este valor suele ser muy alto, se utiliza \emph{Miss Rate}.
+\item \emph{Average Memory--Access Time}: Tiempo promedio para acceder
+  a un dato:
+  \begin{equation*}
+    = \text{Hit Time} + \text{Miss Rate} \times \text{Miss Penalty}
+       \quad \left[ \eta s \ \text{o clocks} \right]
+  \end{equation*}
+\item \emph{Miss Penalty}: Tiempo para reemplazar un bloque de memoria
+  desde un nivel inferior, incluyendo el reemplazo en la CPU:
+  \begin{itemize}
+  \item \emph{Access Time}: Retardo desde el nivel inferior
+  \item \emph{Transfer Time}: Tiempo de transferencia del bloque
+  \end{itemize}
+\end{itemize}
+
+\subsection*{Terminología}
+
+\begin{itemize}
+\item \emph{Hit}: Los datos se encuentran en algún bloque de niveles
+  superiores:
+  \begin{itemize}
+  \item \emph{Hit Rate}: Fracción de accesos a memoria encontrados en
+    los niveles superiores
+  \item \emph{Hit Time}: Tiempo para acceder a los niveles superiores,
+    que consiste en tiempo de acceso a la RAM + tiempo para determinar
+    \emph{Hit/Miss}
+  \end{itemize}
+\item \emph{Miss}: Se necesita traer los datos desde niveles
+  inferiores:
+  \begin{itemize}
+  \item \emph{Miss Rate} = 1 - (\emph{Hit Rate})
+  \item \emph{Miss Penalty}: el tiempo para reemplazar un bloque en un
+    nivel superior + el tiempo para entregar el bloque al procesador
+  \end{itemize}
+\item \emph{Hit Time} $<<$ \emph{Miss Penalty}
+\end{itemize}
+
+
+\subsection*{Performance}
+
+El tiempo de ejecución de un programa está dado por
+\begin{align}
+  T &= I_{\text{count}}  \times \text{CPI} \times T_{\text{cycle}} \\
+  I_{\text{count}} &= I_{\text{ALU}} + I_{\text{MEM}} \\
+  \text{CPI} &= \frac{I_{\text{ALU}}}{I_{\text{count}}} \times
+  \text{CPI}_{\text{ALU}}
+  + \frac{I_{\text{MEM}}}{I_{\text{count}}} \times \text{CPI}_{\text{MEM}}
+\end{align}
+
+Desarrollando las instrucciones que deben realizarse
+\begin{align}
+  M_{\text{ALU}} &= \frac{I_{\text{ALU}}}{I_{\text{count}}} \\
+  M_{\text{MEM}} &= \frac{I_{\text{MEM}}}{I_{\text{count}}} \\
+  1 &= M_{\text{ALU}} + M_{\text{MEM}} \\
+  \text{CPI} &= M_{\text{ALU}} \times \text{CPI}_{\text{ALU}}
+  + M_{\text{MEM}} \times \text{CPI}_{\text{MEM}} \\
+  T &= I_{\text{count}} \times \left( M_{\text{ALU}} \times
+    \text{CPI}_{\text{ALU}} + M_{\text{MEM}} \times
+    \text{CPI}_{\text{MEM}} \right)
+  \times T_{\text{cycle}} \\
+  \text{CPI}_{\text{MEM}} &= \text{CPI}_{\text{MEM-HIT}}
+  + r_{\text{MISS}} \times \text{CPI}_{\text{MEM-MISS}}
+\end{align}
+
+Quedando el tiempo total como
+\begin{align}
+  T &= I_{\text{count}} \times \left[ M_{\text{ALU}} \times
+    \text{CPI}_{\text{ALU}} \right.
+  + M_{\text{MEM}} \\
+  \ & \ \ \ \ \times \left( \text{CPI}_{\text{MEM-HIT}} +
+    r_{\text{MISS}} \left. \times \text{CPI}_{\text{MEM-MISS}} \right)
+  \right] \times T_{\text{cycle}} \nonumber
+\end{align}
+
+Donde:
+
+\noindent
+$T$ = Tiempo total de ejecuci\'on\\
+$T_{\text{cycle}}$ = Tiempo de un ciclo de procesador \\
+$I_{\text{count}}$ = N\'umero total de instrucciones \\
+$I_{\text{ALU}}$ = Número de instrucciones de ALU (registro-registro) \\
+$I_{\text{MEM}}$ = Número de instrucciones de memoria (load/store) \\
+$\text{CPI}$ = Promedio de ciclos por instrucción \\
+$\text{CPI}_{\text{ALU}}$ = Promedio de ciclos por instrucción de ALU \\
+$\text{CPI}_{\text{MEM}}$ = Promedio de ciclos por instrucción de memoria \\
+$r_\text{MISS}$ = Tasa de \emph{cache miss} \\
+$r_\text{HIT}$ = Tasa de \emph{cache hit} \\
+$\text{CPI}_{\text{MEM-MISS}}$ = Promedio de ciclos por \emph{cache miss} \\
+$\text{CPI}_{\text{MEM-HIT}}$ = Promedio de ciclos por \emph{cache hit} \\
+$M_{\text{ALU}}$ = Mezcla de instrucciones de ALU \\
+$M_{\text{MEM}}$ = Mezcla de instrucciones de memoria \\
+
+\subsection*{Ejemplos}
+
+¿$T$? = Tiempo total de ejecuci\'on\\
+$T_{\text{cycle}} = 0,5\,\eta s $ \\
+$I_{\text{count}} = 10^{11}$ \\
+$I_{\text{MEM}} = 2 \times 10^{10}$ \\
+$\text{CPI}_{\text{ALU}} = 1$ \\
+$\text{CPI}_{\text{MEM-MISS}} = 100$ \\
+$\text{CPI}_{\text{MEM-HIT}} = 1$ \\
+
+\begin{align*}
+  I_{\text{ALU}} &= I_{\text{count}} - I_{\text{MEM}} = 8 \times 10^{10} \\
+  M_{\text{ALU}} &= \frac{I_{\text{ALU}}}{I_{\text{count}}} = \frac{8 \times 10^{10}}{10^{11}} = \frac{8}{10} = 0,8 \\
+  M_{\text{MEM}} &= \frac{I_{\text{MEM}}}{I_{\text{count}}} = \frac{2 \times 10^{10}}{10^{11}} = \frac{8}{10} = 0,2
+\end{align*}
+
+Para $r_{HIT} = 0,9$
+
+\begin{align*}
+  r_{MISS} &= 1 - r_{HIT} = 0,1 \\
+  \text{CPI}_{\text{MEM}} &= \text{CPI}_{\text{MEM-HIT}} + r_{MISS} \times \text{CPI}_{\text{MEM-MISS}} \\
+         &= 1 + \left( 1 - 0,9 \right) \times 100 = 1 + 10 = 11 \\
+  T &= 10^{11} \times \left[ \left( 0,8 \times 1 \right) + \left( 0,2 \times 11 \right) \right] \times 5 \times 10^{-10} \\
+         &= 150\,s
+\end{align*}
+
+Para $r_{HIT} = 0,7$
+
+\begin{align*}
+  r_{MISS} &= 1 - r_{HIT} = 0,3 \\
+  \text{CPI}_{\text{MEM}} &= \text{CPI}_{\text{MEM-HIT}} + r_{MISS} \times \text{CPI}_{\text{MEM-MISS}} \\
+         &= 1 + \left( 1 - 0,7 \right) \times 100 = 1 + 30 = 31 \\
+  T &= 10^{11} \times \left[ \left( 0,8 \times 1 \right) + \left( 0,2 \times 31 \right) \right] \times 5 \times 10^{-10} \\
+         &= 205\,s
+\end{align*}
+
+Para $r_{HIT} = 0,5$
+
+\begin{align*}
+  r_{MISS} &= 1 - r_{HIT} = 0,5 \\
+  \text{CPI}_{\text{MEM}} &= \text{CPI}_{\text{MEM-HIT}} + r_{MISS} \times \text{CPI}_{\text{MEM-MISS}} \\
+         &= 1 + \left( 1 - 0,5 \right) \times 100 = 1 + 50 = 51 \\
+  T &= 10^{11} \times \left[ \left( 0,8 \times 1 \right) + \left( 0,2 \times 51 \right) \right] \times 5 \times 10^{-10} \\
+         &= 550\,s
+\end{align*}
+
+\end{document}
+

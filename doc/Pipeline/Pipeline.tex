@@ -1,0 +1,175 @@
+\documentclass[a4paper, 11pt]{article}
+
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+
+\usepackage{times}
+
+\usepackage{graphicx}
+\usepackage{subfigure}
+
+\addtolength{\voffset}{-3.5cm}
+\addtolength{\hoffset}{-2cm}
+\addtolength{\textheight}{5cm}
+\addtolength{\textwidth}{4cm}
+
+ 
+\title{Pipeline}
+\author{Maximiliano A. Eschoyez\\ Programación Eficiente --- UBP}
+\date{2010 (rev. 2018 y 2019)}
+
+\begin{document}
+
+\maketitle
+
+Dentro de una computadora cada evento está gobernado por el reloj de
+la CPU. Nada se puede mover a mayor o menor velocidad. El ciclo de
+reloj determina la velocidad de trabajo.
+
+Dado que no se puede aumentar indefinidamente la velocidad de trabajo,
+se pueden realizar algunos trucos para mejorar la performance general
+sin incrementar el ciclo de reloj.
+
+Una de la técnicas utilizadas se denomina ``Pipeline''. Esta técnica
+consiste en dividir un bloque de procesamiento en subbloques menores y
+hacer trabajar en paralelo a todos ellos. En la versión original del
+bloque, cuando ingresa un dato lo bloquea hasta que se termine el
+procesamiento. En la versión pipeline cada dato que ingresa ocupa un
+único subloque, permitiendo procesar parcialmente hasta $n$ datos al
+mismo tiempo (siendo $n$ la cantidad de subbloques).
+
+El nombre ``Pipeline'' deja a las claras la forma de trabajo: los
+datos egresan en el orden que ingresaron, como si los datos fueran
+bolitas que introducimos en una manguera.
+
+La ventaja principal de esta forma de procesamiento es que se consigue
+una mejor tasa de generación de resultados sin necesidad de recaer en
+técnicas de procesamiento más costosas y complejas.
+
+\begin{figure}[h]
+  \centering
+%\input{sinPipeline.pstex_t}
+  \subfigure[Bloque monolítico]{\input{sinPipeline.pstex_t}}
+  \subfigure[Bloque con Pipeline]{\input{PipelineIdeal.pstex_t}}
+%\input{PipelineIdeal.pstex_t}
+  \caption{Bloque monolítico versus Bloque con Pipeline}
+\end{figure}
+
+\noindent
+$T_c$ = Latencia de la légica monolítica \\
+$T_p$ = Latencia del Pipeline completo \\
+$t_p$ = Latencia para cada subbloque del Pipeline \\
+$N$ = Cantidad de subbloques que conforman el Pipeline
+
+En el caso ideal, todos los subbloques poseen el mismo retardo. En la
+realidad, algunos subbloques son más veloces que otros, sin embargo,
+el tiempo de respuesta está condicionado por el subbloque más lento.
+
+\begin{align*}
+  t_p & <  T_c \\
+  T_p &= N \times t_p \\
+  T_c & < T_p
+\end{align*}
+
+Por lo tanto, la performance (throughput) es:
+
+\begin{align}
+  \text{Perf}_c &= \frac{1}{T_c} \\
+  \text{Perf}_p &= \frac{1}{t_p}
+\end{align}
+
+
+\newpage
+\subsection*{Ejemplo Pipeline Ideal de Bloques con Igual Retardo}
+
+
+\begin{figure}[h]
+  \centering
+  \subfigure[Bloque monolítico]{\input{sinPipelineEj1.pstex_t}}
+  \subfigure[Bloque con Pipeline]{\input{PipelineEj1.pstex_t}}
+  \caption{Diagramas del ejemplo 1.}
+\end{figure}
+
+
+Cuando ingresa un único dato (lo mismo para la espera del primer
+resultado), el tiempo de espera es:
+\begin{align*}
+  T_c &= 10\,\eta s \\
+  T_p &= N \times t_p \\
+      &= 4 \times 5\,\eta s = 20\,\eta s
+\end{align*}
+
+Por lo tanto, la performance (\emph{throughput}) es:
+\begin{align*}
+  \text{Perf}_c &= \frac{1}{T_c} = \frac{1}{10\,\eta s} = 100\,Mhz \\
+  \text{Perf}_p &= \frac{1}{t_p} = \frac{1}{5\,\eta s} = 200\,Mhz
+\end{align*}
+
+
+En el caso de tener que procesar 1000 datos tendríamos:
+\begin{align*}
+  T_c &= 1000 \times 10\,\eta s = 10\,ms \\
+  T_p &= (1000 + 3) \times 5\,\eta s = 5,015\,m s \approx 5\,ms
+\end{align*}
+Donde el valor 3 está representando el retardo de espera para que se
+genere el primer resultado.
+
+La línea de tiempo de ambos bloques será la siguiente:
+ 
+\begin{figure}[h]
+  \centering
+  \input{timelineEj1.pstex_t}
+  \caption{Línea de tiempo del ejercicio 1.}
+\end{figure}
+
+
+\newpage
+\subsection*{Ejemplo Pipeline Ideal de Bloques con Distinto Retardo}
+
+
+\begin{figure}[h]
+  \centering
+  \subfigure[Bloque monolítico]{\input{sinPipelineEj1.pstex_t}}
+  \subfigure[Bloque con Pipeline]{\input{PipelineEj2.pstex_t}}
+  \caption{Diagramas del ejemplo 2.}
+\end{figure}
+
+En el caso que los subbloques sean de distinto retardo, el bloque más
+lento es el que determina la frecuencia de trabajo del Pipeline.
+
+Cuando ingresa un único dato (lo mismo para la espera del primer
+resultado), el tiempo de espera es:
+\begin{align*}
+  T_c &= 10\,\eta s \\
+  T_p &= N \times t_p \\
+      &= 4 \times 8\,\eta s = 32\,\eta s
+\end{align*}
+
+Por lo tanto, la performance (throughput) es:
+\begin{align*}
+  \text{Perf}_c &= \frac{1}{T_c} = \frac{1}{10\,\eta s} = 100\,Mhz \\
+  \text{Perf}_p &= \frac{1}{t_p} = \frac{1}{8\,\eta s} = 125\,Mhz
+\end{align*}
+
+
+En el caso de tener que procesar 1000 datos tendríamos:
+\begin{align*}
+  T_c &= 1000 \times 10\,\eta s = 10\,ms \\
+  T_p &= (1000 + 3) \times 8\,\eta s = 8,024\,m s \approx 8\,ms
+\end{align*}
+Donde el valor 3 está representando el retardo de espera para que se
+genere el primer resultado.
+
+La línea de tiempo de ambos bloques será la siguiente:
+ 
+\begin{figure}[h]
+  \centering
+  \input{timelineEj2.pstex_t}
+  \caption{Línea de tiempo del ejercicio 2.}
+\end{figure}
+
+
+
+\end{document}

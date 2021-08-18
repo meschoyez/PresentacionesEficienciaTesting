@@ -1,0 +1,41 @@
+\documentclass[a4paper, 11pt]{article}
+
+\addtolength{\textwidth}{1cm}
+
+\usepackage[spanish]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+
+\addtolength{\voffset}{-3cm}
+\addtolength{\textheight}{5cm}
+ 
+\title{Ley de Amdhal}
+\author{Maximiliano A. Eschoyez}
+\date{2010}
+
+\begin{document}
+
+\maketitle
+
+\noindent
+$T_0$ = Tiempo de computación sin aceleración \\
+$T_A$ = Tiempo de computación con aceleración \\
+$T_F$ = Tiempo de la porción de computación que puede ser acelerada \\
+$g$ = Pico de ganancia de performance para la porción de computación acelerada \\
+$f$ = Fracción de computación no acelerada que puede acelerarse \\
+$S$ = Ganancia de velocidad (\emph{speed--up}) de la computación con la aceleración ya aplicada \\
+
+Entonces:
+\begin{align*}
+  S &= \frac{T_0}{T_A} \\
+  f &= \frac{T_F}{T_0} \\
+  T_A &= \left(1 - f \right) \times T_0 + \frac{f}{g} \times T_0 \\
+  S &= \frac{T_0}{\left(1 - f \right) \times T_0 + \frac{f}{g} \times T_0} \\
+\end{align*}
+Obteniéndose
+\begin{equation}
+  S = \frac{1}{\left(1 - f \right)+ \frac{f}{g}}
+\end{equation}
+
+\end{document}
