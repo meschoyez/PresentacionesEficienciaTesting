@@ -69,3 +69,43 @@
     \end{block}
 \end{frame}
 
+\begin{frame}{Representación de los Números}
+    Representación de Números
+    \begin{itemize}
+        \item Enteros $\Rightarrow$ Subconjunto de $\mathbb{Z}$
+        \item Reales $\Rightarrow$ Subconjunto de $\mathbb{R}$
+        \begin{itemize}
+            \item Existen varios formatos para representarlos
+            \begin{itemize}
+                \item Punto fijo
+                \item Punto Flotante
+                \item BCD (\emph{Binary Coded Decimal})
+                \item Fracción entre Enteros
+                \item \dots
+            \end{itemize}
+            \item Varía precisión y tiempo de procesamiento
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Números Punto Flotante -- IEEE 754}
+    \begin{block}{Ventajas}
+        \begin{itemize}
+            \item Estándar utilizado en general
+            \item Especifica:
+            \begin{itemize}
+                \item Cómo representarlos
+                \item Cómo operar
+            \end{itemize}
+            \item Ampliamente difundido para propósito general
+            \item Implementación por software o hardware (co--procesador)
+        \end{itemize}
+    \end{block}
+    \begin{block}{Desventajas}
+        \begin{itemize}
+            \item Distribución no uniforme
+            \item Presenta problemas de precisión para usos específicos
+            \item Las optimizaciones del compilador reducen precisión
+        \end{itemize}
+    \end{block}
+\end{frame}
