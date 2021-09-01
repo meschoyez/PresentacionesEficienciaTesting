@@ -6,19 +6,46 @@
     Tiempo de ejecución
     \begin{itemize}
         \item \verb|$ time exec| $\Rightarrow$ grano grueso
-        \item \verb|gettimeofday()| $\Rightarrow$ grano fino
+        \item \verb|clock_gettime()| $\Rightarrow$ grano fino
         \begin{lstlisting}[style=consola]
-  gettimeofday(inicio, NULL);
+  struct timespec inicio, fin;
   ..
-  gettimeofday(fin, NULL);
+  clock_gettime(CLOCK_REALTIME, &inicio);
+  ..
+  clock_gettime(CLOCK_REALTIME, &fin);
         \end{lstlisting}
         \item \verb|clock()| $\Rightarrow$ tiempo de CPU
         \begin{lstlisting}[style=consola]
-  inicio = clock();
+  clock_t tiempo;
   ..
-  fin = clock();
+  tiempo = clock();
+  printf("CPU %d sec\n", tiempo / CLOCKS_PER_SEC);
         \end{lstlisting}
         % \item \verb|clock()|
         % \item \verb|clock()|
     \end{itemize}
 \end{frame}
+
+
+\begin{frame}[fragile]{\emph{Profiling} con Gprof}
+    La herramienta \verb|gprof| permite observar el comportamiento del software
+    \begin{itemize}
+        \item Debemos compilar con el \emph{flag} \verb|-pg|
+        \item La ejecución del programa generará un archivo \verb|gmon.out|
+        \item Invocamos a \verb|gprof| para ver los resultados
+        \item Si no genera datos \emph{post} ejecución, debemos agregar el \emph{flag} \verb|-no-pie|
+        \item Los datos recolectados corresponden a la última ejecución
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\emph{Profiling} con Gcov}
+    La herramienta \verb|gcov| permite observar la cobertura que se realiza sobre código fuente del software
+    \begin{itemize}
+        \item Debemos compilar con el \emph{flag} \verb|--coverage|, sinónimo de los \emph{flags} \verb|-ftest-coverage| y \verb|-fprofile-arcs|
+        \item La ejecución del programa generará dos archivos con extensión \verb|.gcno| y \verb|.gcda|
+        \item Invocamos a \verb|gcov| para ver los resultados
+        \item Los datos recolectados corresponden al acumulado de las ejecuciones
+        \item Al recompilar se reinician los contadores
+    \end{itemize}
+\end{frame}
+
