@@ -1,5 +1,9 @@
 \begin{picture}(0,0)%
+<<<<<<< HEAD
 \includegraphics{valgrindStack.pdf}%
+=======
+\includegraphics{../imagenes/valgrindStack.pdf}%
+>>>>>>> 2b7c94df7374bd87cdebd64e5e759491896157e3
 \end{picture}%
 \setlength{\unitlength}{4144sp}%
 %
