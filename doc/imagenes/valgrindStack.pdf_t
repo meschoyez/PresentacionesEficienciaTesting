@@ -1,0 +1,23 @@
+\begin{picture}(0,0)%
+\includegraphics{valgrindStack.pdf}%
+\end{picture}%
+\setlength{\unitlength}{4144sp}%
+%
+\begingroup\makeatletter\ifx\SetFigFont\undefined%
+\gdef\SetFigFont#1#2#3#4#5{%
+  \reset@font\fontsize{#1}{#2pt}%
+  \fontfamily{#3}\fontseries{#4}\fontshape{#5}%
+  \selectfont}%
+\fi\endgroup%
+\begin{picture}(1599,1824)(-11,-973)
+\put(788,569){\makebox(0,0)[b]{\smash{{\SetFigFont{11}{13.2}{\sfdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}Aplicaci\'on}%
+}}}}
+\put(1171,209){\makebox(0,0)[b]{\smash{{\SetFigFont{11}{13.2}{\sfdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}I/O}%
+}}}}
+\put(788,-106){\makebox(0,0)[b]{\smash{{\SetFigFont{11}{13.2}{\sfdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}Valgrind}%
+}}}}
+\put(1171,-466){\makebox(0,0)[b]{\smash{{\SetFigFont{11}{13.2}{\sfdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}I/O}%
+}}}}
+\put(788,-781){\makebox(0,0)[b]{\smash{{\SetFigFont{11}{13.2}{\sfdefault}{\mddefault}{\updefault}{\color[rgb]{1,1,1}Sistema Operativo}%
+}}}}
+\end{picture}%
